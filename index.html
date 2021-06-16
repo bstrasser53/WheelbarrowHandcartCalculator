@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Wheelbarrow and Handcart Calculator</h2>
+<p id="WrittenBy">Written by Bernhard Strasser ([o.p.]kanalratte). Version 0.2.</p>
+<p id="UseOrReuse">Feel free to use or reuse this html & javascript code.</p>
+
+<label for="lWheelOrHand">Wheelbarrow or Handcart?:</label>
+<select name="sWheelOrHand" id="sWheelOrHand">
+	<option value="Wheelbarrow">Wheelbarrow</option>
+	<option value="Handcart">Handcart</option>
+</select>
+
+<br>
+<p id="VilDistributionText">How many vils do you have on: </p>
+<label for="VilsOnFarms">Farms:</label>
+<tab id=t1><input type="number" value="18" id="VilsOnFarms" name="VilsOnFarms" required
+       minlength="1" maxlength="3" size="10">
+<br>
+
+<label for="VilsOnWood">Wood:</label>
+<tab id=t1><input type="number" value="10" id="VilsOnWood" name="VilsOnWood" required
+       minlength="1" maxlength="3" size="10">
+<br>
+
+<label for="VilsOnGold">Gold:</label>
+<input type="number" value="6" id="VilsOnGold" name="VilsOnGold" required
+       minlength="1" maxlength="3" size="10">
+<br>
+<br>
+<br>
+
+
+
+
+
+
+<p id="PutVilsOnText">Instead of  wheelbarrow, you can build 3 vils. How many do you want to place on:</p>
+<!-- Where to put vils instead of wheelbarrow -->
+<label for="PutVilsOnFarms">Farms:</label>
+<tab id=t1><input type="number" value="0" id="PutVilsOnFarms" name="PutVilsOnFarms" required
+       minlength="1" maxlength="3" size="10">
+<br>
+
+<label for="PutVilsOnWood">Wood:</label>
+<tab id=t1><input type="number" value="0" id="PutVilsOnWood" name="PutVilsOnWood" required
+       minlength="1" maxlength="3" size="10">
+<br>
+
+<label for="PutVilsOnGold">Gold:</label>
+<tab id=t1><input type="number" value="3" id="PutVilsOnGold" name="PutVilsOnGold" required
+       minlength="1" maxlength="3" size="10">
+<br>
+<br>
+<br>
+
+
+
+
+
+<p id="HowManyTCsText">How many Town Centers do you have?</p>
+<label for="NoOfTownCenters">Number of Town Centers:</label>
+<input type="number" value="1" id="NoOfTownCenters" name="NoOfTownCenters" required
+       minlength="1" maxlength="2" size="10">
+
+
+
+<!--
+<form>
+  <table id="InputTable">
+    <tr>
+      <td align="right">Vils on Farms:</td>
+      <td align="left"><input type="number" value="10" name="VilsOnFarms" /></td>
+    </tr>
+    <tr>
+      <td align="right">Vils on Wood:</td>
+      <td align="left"><input type="number" value="18" name="VilsOnWood" /></td>
+    </tr>
+    <tr>
+      <td align="right">Vils on Gold:</td>
+      <td align="left"><input type="number" value="6" name="VilsOnGold" /></td>
+    </tr>
+    <tr>
+      <td align="right">Number of Town Centers:</td>
+      <td align="left"><input type="number" value="1" name="NoOfTCs" /></td>
+    </tr>
+  </table>
+</form>
+-->
+
+<br>
+<br>
+<br>
+<button type="button" onclick="myFunction()">Start Calculation...</button>
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<p id="Output0">Result: </p>
+<p id="Output1"></p>
+<p id="Output2"></p>
+<p id="Output3"></p>
+<p id="Output4"></p>
+<p id="Output5"></p>
+<p id="Output6"></p>
+
+
+<!-- DEBUG: -->
+<!--
+<p id="Output7"></p>
+<p id="Output8"></p>
+<p id="Output9"></p>
+<p id="Output10"></p>
+-->
+
+
+<script>
+function myFunction() {
+
+
+	// Some constants
+	// Coll rates of stone, berries, hunt & fish not known!
+	var	FarmCollRatePerVilWOWheel = 19.8/60.0;		// Res/s, From Spirit of the Law: https://www.youtube.com/watch?list=LL6l2c8RA_atAeAZD0vbnNxQ&v=ptOemyCGDDQ
+	var	WoodCollRatePerVilWOWheel = 23.4/60.0;
+	var	GoldCollRatePerVilWOWheel = 22.7/60.0;
+	var	FarmCollRatePerVilWWheel = 22.5/60.0;
+	var	WoodCollRatePerVilWWheel = 24.1/60.0;
+	var	GoldCollRatePerVilWWheel = 23.3/60.0;
+	var	ExtraCostOfWheel = 75+29; 								// Why 104? See further below.
+
+
+  // Get variables from User Input
+  var vVilsOnFarmsWWheel = parseFloat(document.getElementById("VilsOnFarms").value);
+  var vVilsOnWoodWWheel = parseFloat(document.getElementById("VilsOnWood").value);  
+  var vVilsOnGoldWWheel = parseFloat(document.getElementById("VilsOnGold").value); 
+  
+  var vPutVilsOnFarms = parseFloat(document.getElementById("PutVilsOnFarms").value);
+  var vPutVilsOnWood = parseFloat(document.getElementById("PutVilsOnWood").value);  
+  var vPutVilsOnGold = parseFloat(document.getElementById("PutVilsOnGold").value);  
+  
+  var vNoOfTownCenters = parseFloat(document.getElementById("NoOfTownCenters").value);   
+  
+  // VilDistribution without wheelbarrow:
+  var vVilsOnFarmsWOWheel = vVilsOnFarmsWWheel + vPutVilsOnFarms;
+  var vVilsOnWoodWOWheel = vVilsOnWoodWWheel + vPutVilsOnWood;  
+  var vVilsOnGoldWOWheel = vVilsOnGoldWWheel + vPutVilsOnGold; 
+  
+  // DEBUG:
+	// //	document.getElementById("Output2").innerHTML = "Res/s with Wheelbarrow (farm,wood,gold): (" + vPutVilsOnFarms + "," + vPutVilsOnWood + "," + vPutVilsOnGold + "," + (vPutVilsOnFarms + vPutVilsOnWood + vPutVilsOnGold) + ")";
+	
+	if ((vPutVilsOnFarms + vPutVilsOnWood + vPutVilsOnGold) != 3) 
+	{
+		document.getElementById("Output1").innerHTML = "Error: you must exactly place 3.0 vils on wood, farms and gold. Neither more, nor less! Try again ...";
+		
+		// Reset other output so that the error is more visible
+		document.getElementById("Output2").innerHTML = "";
+		document.getElementById("Output3").innerHTML = "";
+		document.getElementById("Output4").innerHTML = "";
+		document.getElementById("Output5").innerHTML = "";
+		document.getElementById("Output6").innerHTML = "";
+		
+		return;
+	} 
+
+
+	// Calculate resource collection rates with and without wheelbarrow:
+	// Now we either make three vils, and put them according to PutVilsOn on different resources, or research wheelbarrow. Afterwards we look how many res are gathered per s in total.
+	var FoodCollRateWOWheel = FarmCollRatePerVilWOWheel*vVilsOnFarmsWOWheel;
+	var WoodCollRateWOWheel = WoodCollRatePerVilWOWheel*vVilsOnWoodWOWheel;	
+
+	var GoldCollRateWOWheel = GoldCollRatePerVilWOWheel*vVilsOnGoldWOWheel;	
+	var TotCollRateWOWheel = FoodCollRateWOWheel + WoodCollRateWOWheel + GoldCollRateWOWheel;
+
+
+	var FoodCollRateWWheel = FarmCollRatePerVilWWheel*vVilsOnFarmsWWheel;
+	var WoodCollRateWWheel = WoodCollRatePerVilWWheel*vVilsOnWoodWWheel;	
+	var GoldCollRateWWheel = GoldCollRatePerVilWWheel*vVilsOnGoldWWheel;	
+	var TotCollRateWWheel = FoodCollRateWWheel + WoodCollRateWWheel + GoldCollRateWWheel;
+
+
+
+
+
+
+  // Calculate payback time (time it takes so that wheelbarrow has amortized)
+
+  // Wheelbarrow costs 75 resources more (50 wood, 25 food), and the two vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched in the other scenario can collect about
+  // 29 resources (see spirit of the law). That means it will take a while so that the scenario with wheelbarrow provides more res.
+  // A complication: while our debt is paid back, we usually keep producing villagers, so we cannot calculate the payback time
+  // with constant collectionrates etc. Instead, we need to update the time it takes for wheelbarrow having paid back each
+  // 25 seconds, and update our collection rates. 
+  // A complication of the complication: We don't know how the player will distribute those new vils!
+  // Solution: Just assume the player will keep same resource distribution (s)he has now. This will be for sure wrong,
+  // but our result is anyway just a rough estimate!
+
+  // So we use the following algorithm: 
+  // 1) Calculate initial payback time with vil-distribution right after 3 vils or wheelbarrow being produced
+  // 2) If that time is infinite, we know the answer: We will never pay back our debt! Otherwise:
+  // 3) Grow vil number by number of TCs, and distribute new vils according to current vil-distribution (farms, wood, gold)
+  // 4) Calculate new payback time with gather-rates.
+  // 5) Update wheelbarrow debt by subtracting surplus resources (wheelbarrow - nowheelbarrow) from current debt.
+  // 6) Update variable PaybackTime by adding 25 s (in last iteration, add less than 25 s). 
+  // 7) If wheelbarrow debt > 0, go to step 3. Else finish.
+
+
+  // Initialize: How long would it take for wheelbarrow being amortized if we didn't produce any vils afterwards?
+  // Need to solve: ExtraCostOfWheel = t * (TotCollRateWWheel - TotCollRateWOWheel) for variable t
+	var TimeToPayoffWheel = ExtraCostOfWheel/(TotCollRateWWheel-TotCollRateWOWheel);
+	if (TimeToPayoffWheel < 0)
+  	{
+  		TimeToPayoffWheel = Number.POSITIVE_INFINITY;
+    }
+
+	var TimeToPayoffWIncVils = 0;
+	
+
+	
+	if (TimeToPayoffWheel < 99999999)
+	{
+		
+
+	  // Time to payoff when adding vils, with a distribution according to the current one
+	  // Grow economy for both cases (with and without wheelbarrow) according to current economy-distribution:
+	  var VilFarmsFractionWWheel = vVilsOnFarmsWWheel/(vVilsOnFarmsWWheel + vVilsOnWoodWWheel + vVilsOnGoldWWheel);
+	  var VilWoodFractionWWheel = vVilsOnWoodWWheel/(vVilsOnFarmsWWheel + vVilsOnWoodWWheel + vVilsOnGoldWWheel);
+	  var VilGoldFractionWWheel = vVilsOnGoldWWheel/(vVilsOnFarmsWWheel + vVilsOnWoodWWheel + vVilsOnGoldWWheel);
+	    
+	  var VilFarmsFractionWOWheel = vVilsOnFarmsWOWheel/(vVilsOnFarmsWOWheel + vVilsOnWoodWOWheel + vVilsOnGoldWOWheel);
+	  var VilWoodFractionWOWheel = vVilsOnWoodWOWheel/(vVilsOnFarmsWOWheel + vVilsOnWoodWOWheel + vVilsOnGoldWOWheel);
+	  var VilGoldFractionWOWheel = vVilsOnGoldWOWheel/(vVilsOnFarmsWOWheel + vVilsOnWoodWOWheel + vVilsOnGoldWOWheel);
+	    
+
+		// Temporary variables tracking the vil distributions in the following while loop, remaining time of payback, and debt
+		var CurVilsOnFarmsWWheel = vVilsOnFarmsWWheel;
+		var CurVilsOnWoodWWheel = vVilsOnWoodWWheel;
+		var CurVilsOnGoldWWheel = vVilsOnGoldWWheel;	
+		
+		var CurVilsOnFarmsWOWheel = vVilsOnFarmsWOWheel;
+		var CurVilsOnWoodWOWheel = vVilsOnWoodWOWheel;
+		var CurVilsOnGoldWOWheel = vVilsOnGoldWOWheel;
+		
+	  var CurWheelDebt = ExtraCostOfWheel;
+	  var ii=0;
+	  var CurtimeToPayOff;
+	  var CurTotCollRateWWheel;
+		var CurTotCollRateWOWheel;
+		
+	  while (CurWheelDebt > 0 && ii < 100)
+		{
+		
+			ii = ii + 1;
+
+	    // Add new vils according to the current distribution. Split vils up in fractions!
+	    CurVilsOnFarmsWWheel = CurVilsOnFarmsWWheel + vNoOfTownCenters*VilFarmsFractionWWheel;
+			CurVilsOnWoodWWheel = CurVilsOnWoodWWheel + vNoOfTownCenters*VilWoodFractionWWheel;
+			CurVilsOnGoldWWheel = CurVilsOnGoldWWheel + vNoOfTownCenters*VilGoldFractionWWheel;
+
+	    CurVilsOnFarmsWOWheel = CurVilsOnFarmsWOWheel + vNoOfTownCenters*VilFarmsFractionWOWheel;
+			CurVilsOnWoodWOWheel = CurVilsOnWoodWOWheel + vNoOfTownCenters*VilWoodFractionWOWheel;
+			CurVilsOnGoldWOWheel = CurVilsOnGoldWOWheel + vNoOfTownCenters*VilGoldFractionWOWheel;
+
+		
+	    // Res produced with and without wheelbarrow   
+	    CurTotCollRateWWheel = FarmCollRatePerVilWWheel*CurVilsOnFarmsWWheel + WoodCollRatePerVilWWheel*CurVilsOnWoodWWheel + GoldCollRatePerVilWWheel*CurVilsOnGoldWWheel;
+	  	CurTotCollRateWOWheel = FarmCollRatePerVilWOWheel*CurVilsOnFarmsWOWheel + WoodCollRatePerVilWOWheel*CurVilsOnWoodWOWheel + GoldCollRatePerVilWOWheel*CurVilsOnGoldWOWheel;
+
+
+	    // With current rate, what's the time it takes to pay off current debt?
+	    CurtimeToPayOff = CurWheelDebt/(CurTotCollRateWWheel-CurTotCollRateWOWheel);
+
+
+	    // Update debt
+	    CurWheelDebt = CurWheelDebt - (CurTotCollRateWWheel-CurTotCollRateWOWheel)*25;
+
+	    // Update payoff time
+	    if (CurtimeToPayOff > 25)
+	    {
+	      TimeToPayoffWIncVils = TimeToPayoffWIncVils + 25;
+			}
+	    else
+	    {
+	      TimeToPayoffWIncVils = TimeToPayoffWIncVils + CurtimeToPayOff;
+	    }
+	      
+		}
+		
+	}
+	else
+  {
+  	TimeToPayoffWIncVils = Number.POSITIVE_INFINITY;
+	}
+
+ 
+
+	document.getElementById("Output1").innerHTML = "Res/s without Wheelbarrow (food,wood,gold)/s: (" + FoodCollRateWOWheel.toFixed(3) + "," + WoodCollRateWOWheel.toFixed(3) + "," + GoldCollRateWOWheel.toFixed(3) + ") / s";
+	document.getElementById("Output2").innerHTML = "Res/s with Wheelbarrow (food,wood,gold)/s: (" + FoodCollRateWWheel.toFixed(3) + "," + WoodCollRateWWheel.toFixed(3) + "," + GoldCollRateWWheel.toFixed(3) + ") / s";
+	
+	document.getElementById("Output3").innerHTML = "Total Res/s without Wheelbarrow: " + TotCollRateWOWheel.toFixed(3) + " / s";  
+	document.getElementById("Output4").innerHTML = "Total Res/s with Wheelbarrow: " + TotCollRateWWheel.toFixed(3) + " / s";    
+ 
+	document.getElementById("Output5").innerHTML = "Time so that wheelbarrow has paid off without vil increase: " + TimeToPayoffWheel.toFixed(1) + " s"; 
+	document.getElementById("Output6").innerHTML = "Time so that wheelbarrow has paid off with vil increase: " + TimeToPayoffWIncVils.toFixed(1) + " s";  
+  
+}
+</script>
+
+
+</body>
+</html>
