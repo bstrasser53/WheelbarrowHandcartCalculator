@@ -3,14 +3,26 @@
 <body>
 
 <h2>Wheelbarrow and Handcart Calculator</h2>
-<p id="WrittenBy">Written by Bernhard Strasser ([o.p.]kanalratte). Version 0.2.</p>
+<p id="WrittenBy">Written by Bernhard Strasser ([o.p.]kanalratte). Version 0.3.</p>
 <p id="UseOrReuse">Feel free to use or reuse this html & javascript code.</p>
+<p id="Comment">Based on the gathering rate values of Spirit of the Law: <a href="https://www.youtube.com/watch?v=izBnksYw-kM">for gold & wood</a>, <a href="https://www.youtube.com/watch?v=MaqvJMEj69k&t=150s">for farms</a>.</p>
+
 
 <br>
 <label for="lWheelOrHand">Wheelbarrow or Handcart?:</label>
 <select name="sWheelOrHand" id="sWheelOrHand" onchange="UpdatesWhenWheelHandSelectionChanges()">
 	<option value="Wheelbarrow">Wheelbarrow</option>
 	<option value="Handcart">Handcart</option>
+</select>
+&nbsp &nbsp &nbsp
+<label for="lPickedCiv">Which Civ?:</label>
+<select name="sPickedCiv" id="sPickedCiv">
+	<option value="Generic">Generic</option>
+	<option value="Khmer">Khmer</option>
+	<option value="Slavs">Slavs</option>
+	<option value="Aztecs">Aztecs</option>
+	<option value="Berber">Berber</option>
+	<option value="Mayans">Mayans</option>
 </select>
 
 <br>
@@ -102,7 +114,6 @@
 <br>
 <br>
 <br>
-<br>
 
 <p id="Output0">Result: </p>
 <p id="Output1"></p>
@@ -147,6 +158,8 @@ function CalcGatherratesAndUpdateOutput() {
 	// Get variables from User Input
   var WheelOrHand = document.getElementById("sWheelOrHand").value;	
 	
+  var PickedCiv = document.getElementById("sPickedCiv").value;	
+    
 
   var vVilsOnFarmsWUpgrade = parseFloat(document.getElementById("VilsOnFarms").value);
   var vVilsOnWoodWUpgrade = parseFloat(document.getElementById("VilsOnWood").value);  
@@ -163,12 +176,57 @@ function CalcGatherratesAndUpdateOutput() {
 	// Coll rates of stone, berries, hunt & fish not known!
 	if (WheelOrHand === "Wheelbarrow")
 	{
-		var	FarmCollRatePerVilWOUpgrade = 19.8/60.0;		// Res/s, From Spirit of the Law: https://www.youtube.com/watch?list=LL6l2c8RA_atAeAZD0vbnNxQ&v=ptOemyCGDDQ
-		var	WoodCollRatePerVilWOUpgrade = 23.4/60.0;
-		var	GoldCollRatePerVilWOUpgrade = 22.7/60.0;
-		var	FarmCollRatePerVilWUpgrade = 22.5/60.0;
-		var	WoodCollRatePerVilWUpgrade = 24.1/60.0;
-		var	GoldCollRatePerVilWUpgrade = 23.3/60.0;
+		// old values (single layered farms)
+		// var	FarmCollRatePerVilWOUpgrade = 19.8/60.0;		// Res/s, From Spirit of the Law: https://www.youtube.com/watch?list=LL6l2c8RA_atAeAZD0vbnNxQ&v=ptOemyCGDDQ
+		// var	WoodCollRatePerVilWOUpgrade = 23.4/60.0;
+		// var	GoldCollRatePerVilWOUpgrade = 22.7/60.0;
+		// var	FarmCollRatePerVilWUpgrade = 22.5/60.0;
+		// var	WoodCollRatePerVilWUpgrade = 24.1/60.0;
+		// var	GoldCollRatePerVilWUpgrade = 23.3/60.0;
+		
+		// new values (double layered farms)
+		
+		
+		// Food/s, From Spirit of the Law: farms: https://www.youtube.com/watch?v=MaqvJMEj69k&t=150s
+		if (PickedCiv == "Generic")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 17.78/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 20.48/60.0;
+		}
+		else if (PickedCiv == "Khmer")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 20.66/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 22.84/60.0;				
+		}
+		else if (PickedCiv == "Slavs")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 19.34/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 22.55/60.0;				
+		}
+		else if (PickedCiv == "Aztecs")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 19.48/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 21.51/60.0;				
+		}
+		else if (PickedCiv == "Berber")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 18.29/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 20.90/60.0;				
+		}
+		else if (PickedCiv == "Mayans")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 17.43/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 19.46/60.0;				
+		}
+		
+		// wood & gold from: https://www.youtube.com/watch?v=izBnksYw-kM
+		var	WoodCollRatePerVilWOUpgrade = 24.1/60.0;		
+		var	GoldCollRatePerVilWOUpgrade = 21.2/60.0;
+
+		var	WoodCollRatePerVilWUpgrade = 24.9/60.0;
+		var	GoldCollRatePerVilWUpgrade = 21.6/60.0;
+		
+		
 		var ExtraVilsInsteadOfUpgrade = 3;
 		var	ExtraCostOfUpgrade = 75+29; 								// Wheelbarrow costs 75 resources more (50 wood, 25 food) than 3 vils. 
   																									// Wheelbarrow takes 3 vilstime to research, so the two vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
@@ -176,12 +234,55 @@ function CalcGatherratesAndUpdateOutput() {
 	}
 	else
 	{
-		var	FarmCollRatePerVilWOUpgrade = 22.5/60.0;			// Res/s, From Spirit of the Law: https://www.youtube.com/watch?list=LL6l2c8RA_atAeAZD0vbnNxQ&v=ptOemyCGDDQ
-		var	WoodCollRatePerVilWOUpgrade = 24.1/60.0;
-		var	GoldCollRatePerVilWOUpgrade = 23.3/60.0;
-		var	FarmCollRatePerVilWUpgrade = 23.9/60.0;		
-		var	WoodCollRatePerVilWUpgrade = 25.3/60.0;
-		var	GoldCollRatePerVilWUpgrade = 24.5/60.0;
+	
+		// old values (single layered farms)
+		// var	FarmCollRatePerVilWOUpgrade = 22.5/60.0;			// Res/s, From Spirit of the Law: https://www.youtube.com/watch?list=LL6l2c8RA_atAeAZD0vbnNxQ&v=ptOemyCGDDQ
+		// var	WoodCollRatePerVilWOUpgrade = 24.1/60.0;
+		// var	GoldCollRatePerVilWOUpgrade = 23.3/60.0;
+		// var	FarmCollRatePerVilWUpgrade = 23.9/60.0;		
+		// var	WoodCollRatePerVilWUpgrade = 25.3/60.0;
+		// var	GoldCollRatePerVilWUpgrade = 24.5/60.0;
+		
+		// new values (double layered farms)
+		if (PickedCiv == "Generic")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 20.48/60.0;		
+			var	FarmCollRatePerVilWUpgrade = 23.37/60.0;		
+		}
+		else if (PickedCiv == "Khmer")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 22.84/60.0;
+			var	FarmCollRatePerVilWUpgrade = 23.72/60.0;				
+		}
+		else if (PickedCiv == "Slavs")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 22.55/60.0;
+			var	FarmCollRatePerVilWUpgrade = 25.66/60.0;				
+		}
+		else if (PickedCiv == "Aztecs")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 21.51/60.0;
+			var	FarmCollRatePerVilWUpgrade = 23.38/60.0;				
+		}
+		else if (PickedCiv == "Berber")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 20.90/60.0;
+			var	FarmCollRatePerVilWUpgrade = 23.38/60.0;				
+		}
+		else if (PickedCiv == "Mayans")
+		{
+			var	FarmCollRatePerVilWOUpgrade = 19.46/60.0;
+			var	FarmCollRatePerVilWUpgrade = 22.79/60.0;				
+		}	
+	
+
+		var	WoodCollRatePerVilWOUpgrade = 29.35/60.0;				// Numbers are different from with wheelbarrow, because bow saw is also included. At least I think
+		var	GoldCollRatePerVilWOUpgrade = 24.675/60.0;
+
+		var	WoodCollRatePerVilWUpgrade = 30.45/60.0;
+		var	GoldCollRatePerVilWUpgrade = 25.25/60.0;
+				
+		
 		var ExtraVilsInsteadOfUpgrade = 2.2;
 		var	ExtraCostOfUpgrade = 390+14; 							// Handcart costs 390 resources more than 2.2 vils. 
 																									// Handcart takes 2.2 vilstime to research, so the 1.2 vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
