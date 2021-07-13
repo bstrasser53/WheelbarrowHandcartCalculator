@@ -23,6 +23,7 @@
 	<option value="Aztecs">Aztecs</option>
 	<option value="Berber">Berber</option>
 	<option value="Mayans">Mayans</option>
+	<option value="Burgundians">Burgundians</option>
 </select>
 
 <br>
@@ -188,12 +189,9 @@ function CalcGatherratesAndUpdateOutput() {
 		
 		
 		// Food/s, From Spirit of the Law: farms: https://www.youtube.com/watch?v=MaqvJMEj69k&t=150s
-		if (PickedCiv == "Generic")
-		{
-			var	FarmCollRatePerVilWOUpgrade = 17.78/60.0;		
-			var	FarmCollRatePerVilWUpgrade = 20.48/60.0;
-		}
-		else if (PickedCiv == "Khmer")
+		var	FarmCollRatePerVilWOUpgrade = 17.78/60.0;		
+		var	FarmCollRatePerVilWUpgrade = 20.48/60.0;
+		if (PickedCiv == "Khmer")
 		{
 			var	FarmCollRatePerVilWOUpgrade = 20.66/60.0;		
 			var	FarmCollRatePerVilWUpgrade = 22.84/60.0;				
@@ -230,7 +228,12 @@ function CalcGatherratesAndUpdateOutput() {
 		var ExtraVilsInsteadOfUpgrade = 3;
 		var	ExtraCostOfUpgrade = 75+29; 								// Wheelbarrow costs 75 resources more (50 wood, 25 food) than 3 vils. 
   																									// Wheelbarrow takes 3 vilstime to research, so the two vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
-  																									// in the other scenario can collect about 29 resources (see spirit of the law).		
+  							
+  							
+  		if (PickedCiv == "Burgundians")
+		{
+			ExtraCostOfUpgrade = ExtraCostOfUpgrade - 88;
+		}																		// in the other scenario can collect about 29 resources (see spirit of the law).		
 	}
 	else
 	{
@@ -244,12 +247,11 @@ function CalcGatherratesAndUpdateOutput() {
 		// var	GoldCollRatePerVilWUpgrade = 24.5/60.0;
 		
 		// new values (double layered farms)
-		if (PickedCiv == "Generic")
-		{
-			var	FarmCollRatePerVilWOUpgrade = 20.48/60.0;		
-			var	FarmCollRatePerVilWUpgrade = 23.37/60.0;		
-		}
-		else if (PickedCiv == "Khmer")
+
+		var	FarmCollRatePerVilWOUpgrade = 20.48/60.0;		
+		var	FarmCollRatePerVilWUpgrade = 23.37/60.0;
+
+		if (PickedCiv == "Khmer")
 		{
 			var	FarmCollRatePerVilWOUpgrade = 22.84/60.0;
 			var	FarmCollRatePerVilWUpgrade = 23.72/60.0;				
@@ -288,9 +290,16 @@ function CalcGatherratesAndUpdateOutput() {
 																									// Handcart takes 2.2 vilstime to research, so the 1.2 vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
 																									// in the other scenario can collect about 14 resources (see spirit of the law).
 																									// (It's not 2.2 bc the last vil just gets out of the tc at the same time when Handcart would be finished, and he cannot collect anything).
+																									
+		if (PickedCiv == "Burgundians")
+		{
+			ExtraCostOfUpgrade = ExtraCostOfUpgrade - 150;
+		}		
+																									
+																									
 	}
 	
-
+	ExtraCostOfUpgrade = ExtraCostOfUpgrade + 60*vPutVilsOnFarms; 		// Assume that we need to build a new farm for each vil that we put on farm
 
   // VilDistribution without wheelbarrow/handcart:
   var vVilsOnFarmsWOUpgrade = vVilsOnFarmsWUpgrade + vPutVilsOnFarms;
