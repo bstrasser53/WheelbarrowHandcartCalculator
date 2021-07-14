@@ -24,6 +24,7 @@
 	<option value="Berber">Berber</option>
 	<option value="Mayans">Mayans</option>
 	<option value="Burgundians">Burgundians</option>
+	<option value="Portuguese">Portuguese</option>
 </select>
 
 <br>
@@ -226,6 +227,11 @@ function CalcGatherratesAndUpdateOutput() {
 		
 		
 		var ExtraVilsInsteadOfUpgrade = 3;
+		if (PickedCiv == "Portuguese")
+		{
+			ExtraVilsInsteadOfUpgrade = 2.3;
+		}
+		
 		var	ExtraCostOfUpgrade = 75+29; 								// Wheelbarrow costs 75 resources more (50 wood, 25 food) than 3 vils. 
   																									// Wheelbarrow takes 3 vilstime to research, so the two vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
   							
@@ -286,6 +292,10 @@ function CalcGatherratesAndUpdateOutput() {
 				
 		
 		var ExtraVilsInsteadOfUpgrade = 2.2;
+		if (PickedCiv == "Portuguese")
+		{
+			ExtraVilsInsteadOfUpgrade = 1.7;
+		}
 		var	ExtraCostOfUpgrade = 390+14; 							// Handcart costs 390 resources more than 2.2 vils. 
 																									// Handcart takes 2.2 vilstime to research, so the 1.2 vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
 																									// in the other scenario can collect about 14 resources (see spirit of the law).
