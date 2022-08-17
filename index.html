@@ -40,6 +40,7 @@
 
 <br>
 <br>
+
 <p id="VilDistributionText">How many vils do you have on: </p>
 <label for="VilsOnFarms">Farms:</label>
 <tab id=t1><input type="number" value="18" id="VilsOnFarms" name="VilsOnFarms" required
@@ -320,7 +321,7 @@ function CalcGatherratesAndUpdateOutput() {
 																									
 	}
 	
-	ExtraCostOfUpgrade = ExtraCostOfUpgrade + 60*vPutVilsOnFarms; 		// Assume that we need to build a new farm for each vil that we put on farm
+	ExtraCostOfUpgrade = ExtraCostOfUpgrade - 60*vPutVilsOnFarms; 		// Assume that we need to build a new farm for each vil that we put on farm
 
   // VilDistribution without wheelbarrow/handcart:
   var vVilsOnFarmsWOUpgrade = vVilsOnFarmsWUpgrade + vPutVilsOnFarms;
@@ -388,11 +389,19 @@ function CalcGatherratesAndUpdateOutput() {
 
   // Initialize: How long would it take for wheelbarrow/handcart being amortized if we didn't produce any vils afterwards?
   // Need to solve: ExtraCostOfUpgrade = t * (TotCollRateWUpgrade - TotCollRateWOUpgrade) for variable t
-	var TimeToPayoffUpgrade = ExtraCostOfUpgrade/(TotCollRateWUpgrade-TotCollRateWOUpgrade);
-	if (TimeToPayoffUpgrade < 0)
+	var TimeToPayoffUpgrade;
+	if (TotCollRateWUpgrade-TotCollRateWOUpgrade < 0)
   	{
   		TimeToPayoffUpgrade = Number.POSITIVE_INFINITY;
     }
+    else if (ExtraCostOfUpgrade <= 0)
+	{
+		TimeToPayoffUpgrade = 0; 		// If we have nothing to pay back, we are done immediately. E.g. if we would create 3 farms, which cost more than wheelbarrow
+	}
+	else
+	{
+		TimeToPayoffUpgrade = ExtraCostOfUpgrade/(TotCollRateWUpgrade-TotCollRateWOUpgrade);
+	}
 
 	var TimeToPayoffWIncVils = 0;
 	
