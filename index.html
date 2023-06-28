@@ -36,6 +36,7 @@
 	<option value="Mayans">Mayans</option>
 	<option value="Burgundians">Burgundians</option>
 	<option value="Portuguese">Portuguese</option>
+	<option value="Vietnamese">Vietnamese</option>
 </select>
 
 <br>
@@ -243,15 +244,23 @@ function CalcGatherratesAndUpdateOutput() {
 		{
 			ExtraVilsInsteadOfUpgrade = 2.4;	// 3/1.25 = 2.4 (25 % faster research)
 		}
+		else if (PickedCiv == "Vietnamese")
+		{
+			ExtraVilsInsteadOfUpgrade = 1.5;
+		}	
 		
-		var	ExtraCostOfUpgrade = 75+29; 								// Wheelbarrow costs 75 resources more (50 wood, 25 food) than 3 vils. 
+		var	ExtraCostOfUpgrade = 75+29*ExtraVilsInsteadOfUpgrade/3.0; 								// Wheelbarrow costs 75 resources more (50 wood, 25 food) than 3 vils. 
   																									// Wheelbarrow takes 3 vilstime to research, so the two vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
   							
   							
   		if (PickedCiv == "Burgundians")
 		{
 			ExtraCostOfUpgrade = ExtraCostOfUpgrade - 88;
-		}																		// in the other scenario can collect about 29 resources (see spirit of the law).		
+		}		
+		else if (PickedCiv == "Vietnamese")
+		{
+			ExtraCostOfUpgrade = ExtraCostOfUpgrade - 50;
+		}																	// in the other scenario can collect about 29 resources (see spirit of the law).		
 	}
 	else
 	{
@@ -308,7 +317,11 @@ function CalcGatherratesAndUpdateOutput() {
 		{
 			ExtraVilsInsteadOfUpgrade = 1.7;
 		}
-		var	ExtraCostOfUpgrade = 390+14; 							// Handcart costs 390 resources more than 2.2 vils. 
+		else if (PickedCiv == "Vietnamese")
+		{
+			ExtraVilsInsteadOfUpgrade = 1.1;
+		}
+		var	ExtraCostOfUpgrade = 390+14*ExtraVilsInsteadOfUpgrade/2.2; 							// Handcart costs 390 resources more than 2.2 vils. 
 																									// Handcart takes 2.2 vilstime to research, so the 1.2 vils that are alrdy prodouced in the one scenario while wheelbarrow would be researched 
 																									// in the other scenario can collect about 14 resources (see spirit of the law).
 																									// (It's not 2.2 bc the last vil just gets out of the tc at the same time when Handcart would be finished, and he cannot collect anything).
@@ -316,6 +329,10 @@ function CalcGatherratesAndUpdateOutput() {
 		if (PickedCiv == "Burgundians")
 		{
 			ExtraCostOfUpgrade = ExtraCostOfUpgrade - 150;
+		}
+		else if (PickedCiv == "Vietnamese")
+		{
+			ExtraCostOfUpgrade = ExtraCostOfUpgrade - 200;
 		}		
 																									
 																									
